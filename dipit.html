@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biscuit Dunking System - Canva Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .file-tab {
+            transition: all 0.3s ease;
+        }
+        
+        .file-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .python-keyword { color: #f59e0b; }
+        .python-string { color: #10b981; }
+        .python-comment { color: #6b7280; }
+        .python-function { color: #3b82f6; }
+        
+        .simulator-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .result-animation {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .robot-arm {
+            animation: dunkAnimation 3s ease-in-out;
+        }
+        
+        @keyframes dunkAnimation {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(20px) rotate(-5deg); }
+            50% { transform: translateY(40px) rotate(-10deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header with Settings Button -->
+        <div class="relative">
+            <button onclick="toggleSidebar()" class="absolute top-0 left-0 bg-white rounded-lg shadow-md p-3 hover:shadow-lg transition-all duration-300 z-50">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </button>
+            
+            <div class="text-center mb-8 pt-4">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">🍪 Biscuit Dunking System</h1>
+                <p class="text-gray-600">Complete ML-powered biscuit analysis workspace</p>
+            </div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleSidebar()"></div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="fixed left-0 top-0 h-full w-96 bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                        📁 Project Files
+                    </h2>
+                    <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- File Tabs -->
+                <div class="space-y-2 mb-6">
+                    <button class="file-tab w-full text-left px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100 active" onclick="showFile('csv')">
+                        📊 biscuit_data.csv
+                    </button>
+                    <button class="file-tab w-full text-left px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100" onclick="showFile('classifier')">
+                        🔍 biscuit_classifier.py
+                    </button>
+                    <button class="file-tab w-full text-left px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100" onclick="showFile('predictor')">
+                        🧠 dunk_predictor.py
+                    </button>
+                    <button class="file-tab w-full text-left px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100" onclick="showFile('robot')">
+                        🤖 robot_arm.py
+                    </button>
+                    <button class="file-tab w-full text-left px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-100" onclick="showFile('detect')">
+                        👁️ detect_biscuit.py
+                    </button>
+                </div>
+
+                <!-- File Contents -->
+                <div class="border-t pt-6">
+                    <!-- CSV File -->
+                    <div id="csv-content" class="file-content">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Training Data</h3>
+                            <span class="text-sm text-gray-500">CSV Format</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-gray-300 text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="border border-gray-300 px-3 py-2 text-left">Type</th>
+                                        <th class="border border-gray-300 px-3 py-2 text-left">Temp (°C)</th>
+                                        <th class="border border-gray-300 px-3 py-2 text-left">MCT (s)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border border-gray-300 px-3 py-2">digestive</td><td class="border border-gray-300 px-3 py-2">70</td><td class="border border-gray-300 px-3 py-2">4.2</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">digestive</td><td class="border border-gray-300 px-3 py-2">80</td><td class="border border-gray-300 px-3 py-2">3.9</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">hobnob</td><td class="border border-gray-300 px-3 py-2">70</td><td class="border border-gray-300 px-3 py-2">3.0</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">hobnob</td><td class="border border-gray-300 px-3 py-2">85</td><td class="border border-gray-300 px-3 py-2">2.7</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">rich_tea</td><td class="border border-gray-300 px-3 py-2">75</td><td class="border border-gray-300 px-3 py-2">2.4</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">rich_tea</td><td class="border border-gray-300 px-3 py-2">65</td><td class="border border-gray-300 px-3 py-2">2.8</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">jammy_dodger</td><td class="border border-gray-300 px-3 py-2">72</td><td class="border border-gray-300 px-3 py-2">3.5</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">bourbon</td><td class="border border-gray-300 px-3 py-2">78</td><td class="border border-gray-300 px-3 py-2">5.1</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">custard_cream</td><td class="border border-gray-300 px-3 py-2">74</td><td class="border border-gray-300 px-3 py-2">4.8</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">ginger_nut</td><td class="border border-gray-300 px-3 py-2">82</td><td class="border border-gray-300 px-3 py-2">6.2</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">shortbread</td><td class="border border-gray-300 px-3 py-2">68</td><td class="border border-gray-300 px-3 py-2">2.1</td></tr>
+                                    <tr class="bg-gray-50"><td class="border border-gray-300 px-3 py-2">oreo</td><td class="border border-gray-300 px-3 py-2">76</td><td class="border border-gray-300 px-3 py-2">3.8</td></tr>
+                                    <tr><td class="border border-gray-300 px-3 py-2">chocolate_chip</td><td class="border border-gray-300 px-3 py-2">71</td><td class="border border-gray-300 px-3 py-2">3.3</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Classifier File -->
+                    <div id="classifier-content" class="file-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Vision Classifier</h3>
+                            <span class="text-sm text-gray-500">Python</span>
+                        </div>
+                        <pre class="code-block p-3 rounded-lg overflow-x-auto text-xs"><code><span class="python-keyword">def</span> <span class="python-function">classify_biscuit</span>(image_path):
+    <span class="python-comment"># Placeholder vision function</span>
+    <span class="python-function">print</span>(<span class="python-string">f"[Vision] Analysing {image_path}..."</span>)
+    <span class="python-keyword">return</span> <span class="python-string">"digestive"</span></code></pre>
+                    </div>
+
+                    <!-- Predictor File -->
+                    <div id="predictor-content" class="file-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">ML Predictor</h3>
+                            <span class="text-sm text-gray-500">Python</span>
+                        </div>
+                        <pre class="code-block p-3 rounded-lg overflow-x-auto text-xs"><code><span class="python-keyword">import</span> pandas <span class="python-keyword">as</span> pd
+<span class="python-keyword">from</span> sklearn.linear_model <span class="python-keyword">import</span> LinearRegression
+
+<span class="python-keyword">class</span> <span class="python-function">DunkPredictor</span>:
+    <span class="python-keyword">def</span> <span class="python-function">__init__</span>(self, csv_path=<span class="python-string">'biscuit_data.csv'</span>):
+        self.model = LinearRegression()
+        self.train(csv_path)
+
+    <span class="python-keyword">def</span> <span class="python-function">predict</span>(self, biscuit_type, temperature):
+        <span class="python-comment"># ML prediction logic</span>
+        prediction = self.model.predict(input_encoded)[0]
+        <span class="python-keyword">return</span> prediction</code></pre>
+                    </div>
+
+                    <!-- Robot Arm File -->
+                    <div id="robot-content" class="file-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Robot Controller</h3>
+                            <span class="text-sm text-gray-500">Python</span>
+                        </div>
+                        <pre class="code-block p-3 rounded-lg overflow-x-auto text-xs"><code><span class="python-keyword">import</span> time
+
+<span class="python-keyword">def</span> <span class="python-function">dunk_biscuit</span>(predicted_mct):
+    wait_time = predicted_mct + 2
+    <span class="python-function">print</span>(<span class="python-string">f"[Robot] Dunking for {wait_time:.2f}s..."</span>)
+    time.sleep(1)
+    <span class="python-function">print</span>(<span class="python-string">"[Robot] Crumbled! 😭"</span>)</code></pre>
+                    </div>
+
+                    <!-- Detect File -->
+                    <div id="detect-content" class="file-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Detection Module</h3>
+                            <span class="text-sm text-gray-500">Python</span>
+                        </div>
+                        <pre class="code-block p-3 rounded-lg overflow-x-auto text-xs"><code><span class="python-keyword">def</span> <span class="python-function">detect_biscuit</span>(image_path):
+    <span class="python-function">print</span>(<span class="python-string">f"[Detection] Processing {image_path}..."</span>)
+    
+    bounding_box = {
+        <span class="python-string">'x'</span>: 150, <span class="python-string">'y'</span>: 200, 
+        <span class="python-string">'confidence'</span>: 0.95
+    }
+    
+    <span class="python-keyword">return</span> bounding_box</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Simulator -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="simulator-panel text-white px-6 py-4">
+                <h2 class="text-xl font-semibold flex items-center">
+                    🧪 System Simulator
+                </h2>
+                <p class="text-blue-100 text-sm mt-1">Test the complete biscuit dunking pipeline</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Input Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Biscuit Type</label>
+                            <select id="biscuitType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="digestive">🍪 Digestive</option>
+                                <option value="hobnob">🌾 Hobnob</option>
+                                <option value="rich_tea">🍃 Rich Tea</option>
+                                <option value="jammy_dodger">🍓 Jammy Dodger</option>
+                                <option value="bourbon">🍫 Bourbon Cream</option>
+                                <option value="custard_cream">🍮 Custard Cream</option>
+                                <option value="ginger_nut">🌶️ Ginger Nut</option>
+                                <option value="shortbread">🧈 Shortbread</option>
+                                <option value="oreo">⚫ Oreo</option>
+                                <option value="chocolate_chip">🍫 Chocolate Chip</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tea Temperature</label>
+                            <div class="flex items-center space-x-4">
+                                <input type="range" id="temperature" min="60" max="90" value="75" class="flex-1">
+                                <span id="tempDisplay" class="text-lg font-semibold text-gray-800 min-w-[60px]">75°C</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="runSimulation()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                            🚀 Run Complete Analysis
+                        </button>
+                    </div>
+                    
+                    <!-- Results Panel -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Analysis Results</h3>
+                        <div id="results" class="space-y-4 text-gray-600">
+                            <p>Click "Run Complete Analysis" to see the system in action!</p>
+                        </div>
+                        
+                        <!-- Robot Arm Visualization -->
+                        <div class="mt-6 text-center">
+                            <div id="robotArm" class="text-6xl opacity-50">🦾</div>
+                            <p class="text-sm text-gray-500 mt-2">Robot Arm Status: Idle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-gray-500">
+            <p class="text-sm">🍪 Biscuit Dunking System v1.0 - ML-Powered Tea Time Optimization</p>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar toggle functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Open sidebar
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                // Close sidebar
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // File switching functionality
+        function showFile(fileType) {
+            // Hide all file contents
+            document.querySelectorAll('.file-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.file-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected file content
+            document.getElementById(fileType + '-content').classList.remove('hidden');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Temperature slider update
+        document.getElementById('temperature').addEventListener('input', function() {
+            document.getElementById('tempDisplay').textContent = this.value + '°C';
+        });
+
+        // Simulation data (mimicking the ML model)
+        const biscuitData = {
+            'digestive': { base: 4.0, tempFactor: -0.02 },
+            'hobnob': { base: 3.2, tempFactor: -0.015 },
+            'rich_tea': { base: 2.8, tempFactor: -0.01 },
+            'jammy_dodger': { base: 3.5, tempFactor: -0.018 },
+            'bourbon': { base: 5.1, tempFactor: -0.025 },
+            'custard_cream': { base: 4.8, tempFactor: -0.022 },
+            'ginger_nut': { base: 6.2, tempFactor: -0.035 },
+            'shortbread': { base: 2.1, tempFactor: -0.008 },
+            'oreo': { base: 3.8, tempFactor: -0.019 },
+            'chocolate_chip': { base: 3.3, tempFactor: -0.016 }
+        };
+
+        function predictDunkTime(biscuitType, temperature) {
+            const data = biscuitData[biscuitType];
+            return Math.max(1.5, data.base + (temperature - 70) * data.tempFactor);
+        }
+
+        function runSimulation() {
+            const biscuitType = document.getElementById('biscuitType').value;
+            const temperature = parseInt(document.getElementById('temperature').value);
+            const resultsDiv = document.getElementById('results');
+            const robotArm = document.getElementById('robotArm');
+            
+            // Clear previous results
+            resultsDiv.innerHTML = '';
+            
+            // Step 1: Detection
+            setTimeout(() => {
+                const step1 = document.createElement('div');
+                step1.className = 'result-animation p-3 bg-blue-50 rounded border-l-4 border-blue-400';
+                step1.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-blue-600 mr-2">👁️</span>
+                        <strong>Detection:</strong> Biscuit detected with 95% confidence
+                    </div>
+                `;
+                resultsDiv.appendChild(step1);
+            }, 500);
+            
+            // Step 2: Classification
+            setTimeout(() => {
+                const step2 = document.createElement('div');
+                step2.className = 'result-animation p-3 bg-green-50 rounded border-l-4 border-green-400';
+                step2.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-green-600 mr-2">🔍</span>
+                        <strong>Classification:</strong> Identified as ${biscuitType}
+                    </div>
+                `;
+                resultsDiv.appendChild(step2);
+            }, 1000);
+            
+            // Step 3: Prediction
+            setTimeout(() => {
+                const predictedTime = predictDunkTime(biscuitType, temperature);
+                const step3 = document.createElement('div');
+                step3.className = 'result-animation p-3 bg-purple-50 rounded border-l-4 border-purple-400';
+                step3.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-purple-600 mr-2">🧠</span>
+                        <strong>ML Prediction:</strong> Optimal dunk time ${predictedTime.toFixed(1)}s at ${temperature}°C
+                    </div>
+                `;
+                resultsDiv.appendChild(step3);
+            }, 1500);
+            
+            // Step 4: Robot Action
+            setTimeout(() => {
+                const actualTime = predictDunkTime(biscuitType, temperature) + 2; // Robot adds 2s
+                const step4 = document.createElement('div');
+                step4.className = 'result-animation p-3 bg-red-50 rounded border-l-4 border-red-400';
+                step4.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-red-600 mr-2">🤖</span>
+                        <strong>Robot Arm:</strong> Dunked for ${actualTime.toFixed(1)}s... Biscuit crumbled! 😭
+                    </div>
+                `;
+                resultsDiv.appendChild(step4);
+                
+                // Animate robot arm
+                robotArm.classList.add('robot-arm');
+                robotArm.style.opacity = '1';
+                
+                setTimeout(() => {
+                    robotArm.classList.remove('robot-arm');
+                    robotArm.style.opacity = '0.5';
+                }, 3000);
+                
+            }, 2000);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96c6066441b38026',t:'MTc1NDcyOTYyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
