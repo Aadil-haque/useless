@@ -1,0 +1,7 @@
+type,temperature,estimated_mct
+digestive,70,4.2
+digestive,80,3.9
+hobnob,70,3.0
+hobnob,85,2.7
+rich_tea,75,2.4
+rich_tea,65,2.8
