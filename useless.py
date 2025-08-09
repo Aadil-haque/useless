@@ -2,7 +2,7 @@ from biscuit_classifier import classify_biscuit
 from dunk_predictor import DunkPredictor
 from robot_arm import dunk_biscuit
 
-def main():
+def useless():
     print("🫖 Welcome to DunkNet: Biscuit Crumble Predictor")
 
     image_path = input("📷 Enter biscuit image path (just type anything for now): ")
@@ -18,4 +18,4 @@ def main():
     dunk_biscuit(mct)
 
 if __name__ == "__main__":
-    main()
+    useless()
